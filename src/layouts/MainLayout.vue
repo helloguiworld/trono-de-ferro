@@ -12,7 +12,9 @@
         />
 
         <q-toolbar-title>
-          Trono de Ferro
+          <router-link class="title" :to="{ path: '/' }">
+            Trono de Ferro
+          </router-link>
         </q-toolbar-title>
 
         <div>Quasar v{{ $q.version }}</div>
@@ -56,12 +58,12 @@ const linksData = [
   //   icon: 'school',
   //   link: 'https://quasar.dev'
   // },
-  // {
-  //   title: 'Github',
-  //   caption: 'github.com/quasarframework',
-  //   icon: 'code',
-  //   link: 'https://github.com/quasarframework'
-  // }
+  {
+    title: 'Github',
+    caption: 'trono de ferro',
+    icon: 'code',
+    link: 'https://github.com/helloguiworld/trono-de-ferro'
+  }
 ]
 
 export default {
@@ -77,3 +79,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+ .title {
+  text-decoration: none;
+  color: #ffffff;
+ }
+</style>

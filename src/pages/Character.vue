@@ -12,12 +12,16 @@
         <p class="tag family">{{ character.family }}</p>
         <p class="tag id">ID {{ character.id }}</p>
         <p v-if="isFav" class="tag favorite">FAVORITADO<q-icon name="star" /></p>
-        <div class="comment">
+        <div :class="`comment${hasNewComment ? ' has-new-comment' : ''}`">
           <p>Comentário</p>
           <textarea name="comment" id="comment" rows="4" placeholder="Escreva um comentário" v-model="comment"></textarea>
-          <button class="button" @click="saveNewComment()">Salvar</button>
-          <p>{{ savedComment }}</p>
-          <p>{{ comment }}</p>
+          <div class="buttons">
+            <button :class="`button restore${hasNewComment ? ' shown' : ''}`" @click="() => this.comment = this.savedComment">Restaurar</button>
+            <button class="button delete" @click="() => this.comment = ''">Apagar</button>
+            <button class="button" @click="saveNewComment()">Salvar</button>
+          </div>
+          <!-- <p>Saved: {{ savedComment }}</p> -->
+          <!-- <p>{{ comment }}</p> -->
         </div>
       </div>
     </div>
@@ -26,12 +30,14 @@
 
 <script>
 import gotServices from 'src/services/gotServices'
+import commentsServices from 'src/services/commentsServices'
 
 export default {
   name: 'PageCharacter',
   data () {
     return {
       character: null,
+      savedComment: '',
       comment: ''
     }
   },
@@ -42,21 +48,60 @@ export default {
     isFav () {
       return this.$store.state.characters.favs.includes(this.character.id)
     },
-    savedComment () {
-      return this.$store.state.characters.comments[this.character.id]
+    hasNewComment () {
+      return this.comment !== this.savedComment
     }
   },
   methods: {
     async fetchData () {
-      const response = await gotServices.fetchCharacterById(this.characterId)
+      let response, comments
+
+      response = await gotServices.fetchCharacterById(this.characterId)
       this.character = response
       console.log(response)
 
-      const savedComment = this.savedComment
-      if (savedComment) this.comment = savedComment
+      response = await commentsServices.getComments()
+      if (response.status === 200) {
+        comments = response.data.reduce((acc, item) => {
+          acc[item.character_id] = item.comment
+          return acc
+        }, {})
+        this.$store.commit('characters/setComments', comments)
+
+        const characterComment = comments[this.character.id]
+        if (characterComment) {
+          this.savedComment = characterComment
+          this.comment = characterComment
+        }
+      }
     },
-    saveNewComment () {
-      this.$store.commit('characters/updateComments', { id: this.character.id, newComment: this.comment })
+    async saveNewComment () {
+      let response
+
+      if (this.savedComment) {
+        if (!this.comment) {
+          // apaga
+          response = await commentsServices.deleteComment(this.character.id)
+          if (response.status === 204) {
+            this.savedComment = ''
+            this.$store.commit('characters/removeComment', this.character.id)
+          }
+        } else if (this.comment !== this.savedComment) {
+          // atualiza
+          response = await commentsServices.patchComment(this.character.id, this.comment)
+          if (response.status === 200) {
+            this.savedComment = this.comment
+            this.$store.commit('characters/updateComment', { id: this.character.id, comment: this.comment })
+          }
+        }
+      } else if (this.comment) {
+        // cria
+        response = await commentsServices.postComment(this.character.id, this.comment)
+        if (response.status === 201) {
+          this.savedComment = this.comment
+          this.$store.commit('characters/addComment', { id: this.character.id, comment: this.comment })
+        }
+      }
     }
   },
   mounted () {
@@ -147,17 +192,31 @@ export default {
       border: 1px solid #a9d7ff;
       padding: 10px;
       border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transition: .3s;
+
+      &.has-new-comment {
+        background-color: #fff9d8;
+        border: 1px solid #fff2a9;
+      }
 
       & p {
         font-size: 14px;
         font-weight: bold;
-        margin-bottom: 5px;
       }
 
       & textarea {
         resize: none;
         width: 100%;
         padding: 5px 10px;
+      }
+
+      & .buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 5px;
       }
 
       & button {
@@ -174,6 +233,31 @@ export default {
 
         &:hover {
           background-color: #04499e;
+        }
+
+        &.delete {
+          background-color: #e73737;
+          color: #ffd7d7;
+
+          &:hover {
+            background-color: #bb1515;
+          }
+        }
+
+        &.restore {
+          background-color: #e7a937;
+          color: #fff3dc;
+          visibility: hidden;
+          opacity: 0;
+
+          &.shown {
+            visibility: visible;
+            opacity: 1;
+          }
+
+          &:hover {
+            background-color: #b47c13;
+          }
         }
       }
     }

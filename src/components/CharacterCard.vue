@@ -20,11 +20,24 @@
 </template>
 
 <script>
+import favsServices from 'src/services/favsServices'
+
 export default {
   props: ['id', 'name', 'title', 'family', 'photoUrl', 'isFav'],
   methods: {
-    updateFavs (id) {
-      this.$store.commit('characters/updateFavs', id)
+    async updateFavs (id) {
+      const isFav = await favsServices.isFav(id)
+      if (isFav) {
+        const response = await favsServices.deleteFav(id)
+        if (response.status === 204) {
+          this.$store.commit('characters/removeFromFavs', id)
+        }
+      } else {
+        const response = await favsServices.postFav(id)
+        if (response.status === 201) {
+          this.$store.commit('characters/addToFavs', id)
+        }
+      }
     }
   }
 }
