@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-export const baseURLAPI = 'http://127.0.0.1:8000/'
+// export const baseURLAPI = 'http://127.0.0.1:8000/'
+export const baseURLAPI = 'https://tronodeferro.up.railway.app/'
 
 const api = axios.create({
   baseURL: baseURLAPI
