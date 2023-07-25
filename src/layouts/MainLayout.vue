@@ -32,7 +32,7 @@
           header
           class="text-grey-8"
         >
-          MENU
+          LINKS
         </q-item-label>
         <EssentialLink
           v-for="link in essentialLinks"
@@ -52,12 +52,6 @@
 import EssentialLink from 'components/EssentialLink.vue'
 
 const linksData = [
-  // {
-  //   title: 'Docs',
-  //   caption: 'quasar.dev',
-  //   icon: 'school',
-  //   link: 'https://quasar.dev'
-  // },
   {
     title: 'Github',
     caption: 'trono de ferro',
