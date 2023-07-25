@@ -51,7 +51,7 @@ export default {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  // gap: 10px;
   transition: .3s;
 
   &:hover {
@@ -63,10 +63,10 @@ export default {
   }
 
   img {
-    margin: 0;
+    margin: 10px 0;
     width: 100%;
-    // height: 160px;
-    aspect-ratio: 1 / 1;
+    height: 240px;
+    // aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 5px;
   }
@@ -88,8 +88,8 @@ export default {
     font-weight: bold;
     text-align: center;
     letter-spacing: 2px;
-    margin: 0;
     padding: 2px 5px;
+    margin: 10px 0 0;
     border-radius: 4px;
     border: 1px solid #adadad;
     color: #383838;
@@ -97,7 +97,7 @@ export default {
 
   .buttons {
     display: flex;
-    gap: 10px;
+    // gap: 10px;
   }
 
   button, a {
@@ -115,6 +115,7 @@ export default {
       padding: 5px;
       border: 1px solid transparent;
       border-color: #feffc8;
+      margin-right: 10px;
       display: flex;
       justify-content: center;
       align-items: center;

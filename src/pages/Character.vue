@@ -117,12 +117,13 @@ export default {
   padding: 20px;
   display: flex;
   align-items: flex-start;
-  gap: 20px;
+  // gap: 20px;
 
   & img {
     width: 30%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+    margin: 0 20px 0 0;
     border-radius: 5px;
   }
 
@@ -133,21 +134,22 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    // gap: 10px;
 
     & p {
-      margin: 0;
+      margin: 0 0 10px;
     }
 
     & .name {
       margin: 0;
       display: flex;
       align-items: center;
-      gap: 10px;
+      // gap: 10px;
 
       & .first-name {
         font-size: 38px;
         font-weight: bold;
+        margin-right: 10px;
       }
 
       & .last-name {
@@ -194,7 +196,7 @@ export default {
       border-radius: 5px;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      // gap: 5px;
       transition: .3s;
 
       &.has-new-comment {
@@ -205,18 +207,20 @@ export default {
       & p {
         font-size: 14px;
         font-weight: bold;
+        margin: 0 0 5px;
       }
 
       & textarea {
         resize: none;
         width: 100%;
         padding: 5px 10px;
+        margin-bottom: 5px;
       }
 
       & .buttons {
         display: flex;
         justify-content: flex-end;
-        gap: 5px;
+        // gap: 5px;
       }
 
       & button {
@@ -227,6 +231,7 @@ export default {
         padding: 5px 10px;
         border: 1px solid transparent;
         border-radius: 4px;
+        margin-left: 5px;
         transition: .3s;
         background-color: #3085d4;
         color: #e2efff;
@@ -270,6 +275,9 @@ export default {
 
     & img {
       width: 100%;
+      height: calc(100vw - 40px);
+      max-height: 80vh;
+      margin: 0 0 10px 0;
     }
   }
 }

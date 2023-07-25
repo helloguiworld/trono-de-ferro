@@ -81,11 +81,12 @@ export default {
     padding: 10px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    // gap: 20px;
 
     & input {
       flex: 1;
       padding: 5px 10px;
+      margin-right: 10px;
     }
 
     & p {
